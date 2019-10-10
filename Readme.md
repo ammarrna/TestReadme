@@ -56,7 +56,7 @@ You need to have python installed on the system on which you are running the scr
 3. Run ETL python file using the following command.This step will first load data in staging tables and then load that data using sql scripts to facts and dimensions.
     python etl.py
     
-4. your data is loaded.
+4. your data is loaded
 
 
 
