@@ -1,0 +1,4 @@
+Job_ID	Job_Name	Source_Tables	Target_Tables	Dependency
+ETL_MD_01	Sync_Product	MARA, MAKT	Dim_Product	None
+ETL_INV_02	Update_Inv	Stock_Ledger	Fact_Inventory	ETL_MD_01
+ETL_SLS_03	Daily_Sales	Header_Sales	Fact_Sales	ETL_INV_02
