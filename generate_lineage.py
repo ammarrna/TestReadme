@@ -4,39 +4,40 @@ def generate_mermaid_from_csv(csv_path):
     # Load the ETL Lineage Sheet
     df = pd.read_csv(csv_path)
     
-    # Initialize Mermaid string with Left-to-Right orientation
+    # Initialize Mermaid string
     mermaid = ["graph LR"]
     
-    # Define styling for different node types
+    # Styling
     mermaid.append("    classDef job fill:#f9f,stroke:#333,stroke-width:2px;")
     mermaid.append("    classDef source fill:#e1f5fe,stroke:#01579b;")
     mermaid.append("    classDef target fill:#e8f5e9,stroke:#2e7d32;")
 
     for _, row in df.iterrows():
-        job_id = row['Job_ID']
-        job_name = row['Job_Name']
-        sources = row['Source_Tables'].split(',') # Handles multiple source tables
-        targets = row['Target_Tables'].split(',')
-        dependency = row['Dependency']
+        job_id = row['Job_ID'].strip()
+        job_name = row['Job_Name'].strip()
+        sources = str(row['Source_Tables']).split(',')
+        targets = str(row['Target_Tables']).split(',')
+        dependencies = str(row['Dependency']).split(',') # Split multiple dependencies
 
-        # 1. Create Source to Job connections
+        # 1. Source to Job
         for src in sources:
             src_clean = src.strip()
-            mermaid.append(f"    {src_clean}[({src_clean})]:::source --> {job_id}[[ {job_name} ]]:::job")
+            if src_clean and src_clean != 'nan':
+                mermaid.append(f"    {src_clean}[({src_clean})]:::source --> {job_id}[[ {job_name} ]]:::job")
 
-        # 2. Create Job to Target connections
+        # 2. Job to Target
         for tgt in targets:
             tgt_clean = tgt.strip()
-            mermaid.append(f"    {job_id} --> {tgt_clean}[({tgt_clean})]:::target")
+            if tgt_clean and tgt_clean != 'nan':
+                mermaid.append(f"    {job_id} --> {tgt_clean}[({tgt_clean})]:::target")
 
-        # 3. Create Job Dependencies (Dotted lines)
-        if pd.notna(dependency) and dependency != "None":
-            mermaid.append(f"    {dependency} -.-> {job_id}")
+        # 3. Handle MULTIPLE Job Dependencies (Dotted lines)
+        for dep in dependencies:
+            dep_clean = dep.strip()
+            if dep_clean and dep_clean not in ["None", "nan", "none"]:
+                mermaid.append(f"    {dep_clean} -.-> {job_id}")
 
     return "\n".join(mermaid)
 
-# --- Usage ---
-# Assuming you have a 'lineage.csv' with columns: 
-# Job_ID, Job_Name, Source_Tables, Target_Tables, Dependency
-# mermaid_code = generate_mermaid_from_csv('lineage.csv')
-# print(mermaid_code)
+# Example Usage:
+# print(generate_mermaid_from_csv('retail_lineage.csv'))
