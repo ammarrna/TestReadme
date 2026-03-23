@@ -1,3 +1,4 @@
+```mermaid
 classDiagram
     direction LR
 
@@ -43,3 +44,4 @@ classDiagram
     IoT_Hub_SENS_DATA --|> FACT_WARRANTY : Map to Standard Catalog
     CRM_Portal_CLM_DTL --|> FACT_WARRANTY : LABOR_HRS * Std_Rate
     Manual_Entry_ADJ_NOTES --|> FACT_WARRANTY : Clean Special Chars
+```
