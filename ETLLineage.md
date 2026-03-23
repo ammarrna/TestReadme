@@ -9,7 +9,8 @@ graph LR
     Stock_Ledger[(Stock_Ledger)]:::source --> ETL_INV_02[[ Update_Inv ]]:::job
     ETL_INV_02 --> Fact_Inventory[(Fact_Inventory)]:::target
     ETL_MD_01 -.-> ETL_INV_02
-    Header_Sales[(Header_Sales)]:::source --> ETL_SLS_03[[ Daily_Sales ]]:::job
+    POS_Lines[(POS_Lines)]:::source --> ETL_SLS_03[[ Daily_Sales ]]:::job
     ETL_SLS_03 --> Fact_Sales[(Fact_Sales)]:::target
+    ETL_MD_01 -.-> ETL_SLS_03
     ETL_INV_02 -.-> ETL_SLS_03
 ```
